@@ -4,7 +4,7 @@ import configparser
 class ReadIni(object):
     def __init__(self, filename=None, node=None):
         if filename is None:
-            filename = "../config/element.ini"
+            filename = "config/element.ini"
         if node is None:
             self.node = "RegisterElements"
         else:
