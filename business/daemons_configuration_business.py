@@ -8,7 +8,7 @@ class DaemonsConfigurationBusiness(object):
         self.handle = DaemonsConfigurationHandle(driver, current_node)
 
     # 添加app
-    def add_app(self, app_name, package_name, launch_page, version, download_url):
+    def add_app(self, app_name, package_name, launch_page, version, download_url, assert_info):
         # 添加之前获取app版本数量
         total_items_before = self.handle.get_total_items()
         # 添加操作
@@ -22,7 +22,7 @@ class DaemonsConfigurationBusiness(object):
         # 添加之后再次获取app版本数量
         time.sleep(2)
         total_items_after = self.handle.get_total_items()
-        return True if total_items_after - total_items_before == 1 else False
+        return True if total_items_after - total_items_before == int(assert_info) else False
 
     # 更新app信息
     def update_app(self, app_name, package_name, launch_page, version, download_url):
@@ -54,7 +54,7 @@ class DaemonsConfigurationBusiness(object):
         return sign
 
     # 删除APP版本
-    def delete_app(self):
+    def delete_app(self, assert_info):
         # 删除之前获取app版本数量
         total_items_before = self.handle.get_total_items()
         # 页面滚动到添加的App位置
@@ -65,4 +65,4 @@ class DaemonsConfigurationBusiness(object):
         time.sleep(2)
         # 删除之后获取app版本数量
         total_items_after = self.handle.get_total_items()
-        return True if total_items_before - total_items_after == 1 else False
+        return True if total_items_before - total_items_after == int(assert_info) else False

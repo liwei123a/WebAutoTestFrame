@@ -42,8 +42,17 @@ def handle_browser():
     driver.maximize_window()
     driver.get('https://web-qa.doctorwork.com/app/smart-device-panel/')
     time.sleep(2)
-    cookie = {'name': 'SESSION', 'value': 'MzQyNGQ1YjktYWI0Ny00YTQxLTk4MWItOGQ2ZmQ0ZDY3NjM2'}
+    cookie = {'name': 'SESSION', 'value': 'ZTQwZGQxODctZWMwYy00N2M4LTgxY2EtODA2ZmIyYjBkZDZl'}
     driver.add_cookie(cookie)
     time.sleep(2)
     yield
     driver.quit()
+
+# def pytest_collection_modifyitems(items):
+#     """
+#     测试用例收集完成时，将收集到的item的name和nodeid的中文显示在控制台上
+#     :return:
+#     """
+#     for item in items:
+#         item.name = item.name.encode("utf-8").decode("unicode_escape")
+#         item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")

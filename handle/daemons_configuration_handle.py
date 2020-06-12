@@ -99,6 +99,5 @@ class DaemonsConfigurationHandle(object):
     # 获取app版本数量
     def get_total_items(self):
         total_items_s = self.page.get_total_items_element().text
-        print(total_items_s)
         total_items_n = int(total_items_s.split()[1])
         return total_items_n
