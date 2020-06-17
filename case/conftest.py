@@ -3,8 +3,18 @@
 import pytest
 import time
 from selenium import webdriver
+from _pytest import terminal
+from log.user_log import UserLog
 
+# 定义driver
 driver = webdriver.Chrome()
+
+# 定义日志
+log = UserLog()
+logger = log.get_logger()
+
+# 定义测试结果
+test_result_summary = {}
 
 @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
@@ -39,6 +49,7 @@ def _capture_screenshot():
 
 @pytest.fixture(scope='session', autouse=True)
 def handle_browser():
+    '''浏览器初始化'''
     driver.maximize_window()
     driver.get('https://web-qa.doctorwork.com/app/smart-device-panel/')
     time.sleep(2)
@@ -46,6 +57,7 @@ def handle_browser():
     driver.add_cookie(cookie)
     time.sleep(2)
     yield
+    log.close_handle()
     driver.quit()
 
 # def pytest_collection_modifyitems(items):
@@ -56,3 +68,24 @@ def handle_browser():
 #     for item in items:
 #         item.name = item.name.encode("utf-8").decode("unicode_escape")
 #         item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
+
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    '''收集测试结果'''
+    # print(terminalreporter.stats)
+    # print("total:", terminalreporter._numcollected)
+    # print('passed:', len([i for i in terminalreporter.stats.get('passed', []) if i.when != 'teardown']))
+    # print('failed:', len([i for i in terminalreporter.stats.get('failed', []) if i.when != 'teardown']))
+    # print('error:', len([i for i in terminalreporter.stats.get('error', []) if i.when != 'teardown']))
+    # print('skipped:', len([i for i in terminalreporter.stats.get('skipped', []) if i.when != 'teardown']))
+    # print('成功率：%.2f' % (len(terminalreporter.stats.get('passed', []))/terminalreporter._numcollected*100)+'%')
+
+    # terminalreporter._sessionstarttime 会话开始时间
+    duration = '{:.2f}'.format(time.time() - terminalreporter._sessionstarttime)
+    # print('total times:', duration, 'seconds')
+    test_result_summary['total'] = terminalreporter._numcollected
+    test_result_summary['passed'] = len([i for i in terminalreporter.stats.get('passed', []) if i.when != 'teardown'])
+    test_result_summary['failed'] = len([i for i in terminalreporter.stats.get('failed', []) if i.when != 'teardown'])
+    test_result_summary['error'] = len([i for i in terminalreporter.stats.get('error', []) if i.when != 'teardown'])
+    test_result_summary['skipped'] = len([i for i in terminalreporter.stats.get('skipped', []) if i.when != 'teardown'])
+    test_result_summary['pass_rate'] = '%.2f' % (len(terminalreporter.stats.get('passed', []))/terminalreporter._numcollected*100)+'%'
+    test_result_summary['test_time'] = duration

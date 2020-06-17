@@ -5,6 +5,7 @@ import time
 from selenium.webdriver.support import expected_conditions as EC
 from business.daemons_configuration_business import DaemonsConfigurationBusiness
 from case.conftest import driver
+from case.conftest import logger
 from base.get_case_data import GetCaseData
 
 # 获取测试数据
@@ -20,6 +21,7 @@ class DaemonsConfigurationCase(object):
         self.business = DaemonsConfigurationBusiness(driver, self.current_node)
         # self.data = GetCaseData('DaemonsConfiguration')
         driver.get('https://web-qa.doctorwork.com/app/smart-device-panel/magicmirrorOld')
+        logger.debug('WebAutoTest starting...')
         time.sleep(2)
 
     # def setup_method(self, method):
