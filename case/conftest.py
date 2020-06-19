@@ -58,7 +58,7 @@ def handle_browser():
     time.sleep(2)
     yield
     log.close_handle()
-    driver.quit()
+    # driver.quit()
 
 # def pytest_collection_modifyitems(items):
 #     """
